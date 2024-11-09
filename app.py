@@ -25,10 +25,16 @@ def get_context_from_serpapi(query):
         data = response.json()
         if 'organic_results' in data and len(data['organic_results']) > 0:
             # Concatenate multiple snippets to provide a more comprehensive context
-            context = " ".join([result['snippet'] for result in data['organic_results'][:3]])
+            context = ""
+            additional_references = []
+            for result in data['organic_results'][:3]:
+                if len(context) + len(result['snippet']) < 512:  # Limit the context length
+                    context += result['snippet'] + " "
+                    additional_references.append(result['link'])
+                else:
+                    break
             reference = data['organic_results'][0]['link']
-            additional_references = [result['link'] for result in data['organic_results'][1:3]]
-            return context, reference, additional_references
+            return context.strip(), reference, additional_references
     return None, None, None
 
 def generate_fallback_response(query):
