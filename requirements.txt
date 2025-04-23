@@ -7,4 +7,4 @@ tensorboard-plugin-3d==1.0.3
 tensorflow==2.16.1
 gunicorn==23.0.0
 pillow==10.2.0
-transformers==4.39.3
+transformers>=4.48.0
